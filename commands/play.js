@@ -1,5 +1,6 @@
 const { SlashCommand, CommandOptionType } = require('slash-create');
 const { QueryType } = require('discord-player');
+const playdl = require("play-dl");
 
 module.exports = class extends SlashCommand {
     constructor(creator) {
@@ -41,6 +42,14 @@ module.exports = class extends SlashCommand {
         const queue = await client.player.createQueue(guild, {
             metadata: channel
         });
+
+        if(!queue.createStream) {
+            queue.createStream = async (track, source, _queue) => {
+                if (source === "youtube") {
+                    return (await playdl.stream(track.url, process.env.COOKIES)).stream;
+                }
+            };
+        }
 
         const member = guild.members.cache.get(ctx.user.id) ?? await guild.members.fetch(ctx.user.id);
         try {
