@@ -21,7 +21,8 @@ client.player = new Player(client, {
             headers: {
                 Cookie: process.env.COOKIES ?? ""
             }
-        }
+        },
+        quality: "highestaudio"
     }
 });
 registerPlayerEvents(client.player);
