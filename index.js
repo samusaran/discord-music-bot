@@ -22,7 +22,7 @@ client.player = new Player(client, {
                 Cookie: process.env.COOKIES ?? ""
             }
         },
-        quality: "highestaudio"
+        quality: "lowestaudio"
     }
 });
 registerPlayerEvents(client.player);
