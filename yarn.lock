@@ -33,7 +33,7 @@
     "http-response-object" "^3.0.1"
     "parse-cache-control" "^1.0.1"
 
-"@discord-player/equalizer@*":
+"@discord-player/equalizer@*", "@discord-player/equalizer@^0.2.0":
   "integrity" "sha512-4wJws2PhAaKGxLmFeBWUyxsOMVYLQUX6iwtilV0caXJAgV/lWTQHsdKCIdh7fv0ProFLumDkIS/v9Jwtq1BIJw=="
   "resolved" "https://registry.npmjs.org/@discord-player/equalizer/-/equalizer-0.2.0.tgz"
   "version" "0.2.0"
