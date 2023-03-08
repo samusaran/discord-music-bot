@@ -1,4 +1,5 @@
 const { SlashCommand } = require('slash-create');
+const {Player} = require("discord-player");
 
 module.exports = class extends SlashCommand {
     constructor(creator) {
@@ -11,14 +12,15 @@ module.exports = class extends SlashCommand {
     }
 
     async run(ctx) {
-        
+
         const { client } = require('..');
-        
+        const player = Player.singleton(client);
+
         await ctx.defer();
-        const queue = client.player.getQueue(ctx.guildID);
-        if (!queue || !queue.playing) return void ctx.sendFollowUp({ content: '❌ | No music is being played!' });
-        const currentTrack = queue.current;
-        const success = queue.skip();
+        const queue = player.nodes.get(ctx.guildID);
+        if (!queue || !queue.isPlaying()) return void ctx.sendFollowUp({ content: '❌ | No music is being played!' });
+        const currentTrack = queue.currentTrack;
+        const success = queue.node.skip();
         return void ctx.sendFollowUp({
             content: success ? `✅ | Skipped **${currentTrack}**!` : '❌ | Something went wrong!'
         });

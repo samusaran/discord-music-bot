@@ -1,5 +1,5 @@
 const { SlashCommand, CommandOptionType } = require('slash-create');
-const { QueryType } = require('discord-player');
+const { Player} = require('discord-player');
 
 module.exports = class extends SlashCommand {
     constructor(creator) {
@@ -22,41 +22,25 @@ module.exports = class extends SlashCommand {
     async run (ctx) {
 
         const { client } = require('..');
+        const player = Player.singleton(client);
 
         await ctx.defer();
 
         const guild = client.guilds.cache.get(ctx.guildID);
         const channel = guild.channels.cache.get(ctx.channelID);
         const query = ctx.options.query;
-        const searchResult = await client.player
-            .search(query, {
-                requestedBy: ctx.user,
-                searchEngine: QueryType.AUTO
-            })
-            .catch(() => {
-                console.log('he');
-            });
-        if (!searchResult || !searchResult.tracks.length) return void ctx.sendFollowUp({ content: 'No results were found!' });
 
-        const queue = await client.player.createQueue(guild, {
-            ytdlOptions: {
-                filter: 'audioonly',
-                highWaterMark: 1 << 30,
-                dlChunkSize: 0,
-            },
-            metadata: channel
-        });
-
-        const member = guild.members.cache.get(ctx.user.id) ?? await guild.members.fetch(ctx.user.id);
         try {
-            if (!queue.connection) await queue.connect(member.voice.channel);
-        } catch {
-            void client.player.deleteQueue(ctx.guildID);
-            return void ctx.sendFollowUp({ content: 'Could not join your voice channel!' });
-        }
+            const { track } = await player.play(channel, query, {
+                nodeOptions: {
+                    metadata: ctx
+                }
+            });
 
-        await ctx.sendFollowUp({ content: `⏱ | Loading your ${searchResult.playlist ? 'playlist' : 'track'}...` });
-        searchResult.playlist ? queue.addTracks(searchResult.tracks) : queue.addTrack(searchResult.tracks[0]);
-        if (!queue.playing) await queue.play();
+            return ctx.sendFollowUp(`**${track.title}** enqueued!`);
+        } catch (e) {
+            // let's return error if something failed
+            return ctx.sendFollowUp(`Something went wrong: ${e}`);
+        }
     }
 };
