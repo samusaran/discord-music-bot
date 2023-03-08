@@ -1255,7 +1255,7 @@
   "resolved" "https://registry.npmjs.org/play-audio/-/play-audio-0.5.2.tgz"
   "version" "0.5.2"
 
-"play-dl@^1.9.6", "play-dl@1.x":
+"play-dl@1.x":
   "integrity" "sha512-JW44bQbME9fNfGhGXQ/rdcsHr4BfgJabVlSgpS9QY/NscfprFH1asv+q9atrZThP3+hHIpgtFNABccg9rFWlwg=="
   "resolved" "https://registry.npmjs.org/play-dl/-/play-dl-1.9.6.tgz"
   "version" "1.9.6"
