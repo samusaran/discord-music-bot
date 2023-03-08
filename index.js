@@ -16,18 +16,7 @@ const client = new Client({
     ]
 });
 
-const player = Player.singleton(client, {
-    ytdlOptions: {
-        requestOptions: {
-            headers: {
-             //   Cookie: process.env.COOKIES
-            }
-        },
-        dlChunkSize: 0,
-        highWaterMark: 1 << 25,
-        filter: "audioonly",
-    }
-});
+const player = Player.singleton(client);
 registerPlayerEvents(player);
 
 const creator = new SlashCreator({
