@@ -27,8 +27,10 @@ module.exports = class extends SlashCommand {
         await ctx.defer();
 
         const guild = client.guilds.cache.get(ctx.guildID);
-        const channel = guild.channels.cache.get(ctx.channelID);
+        const member = guild.members.cache.get(ctx.member.user.id);
+        const channel = member.voice.channel;
         const query = ctx.options.query;
+
 
         try {
             const { track } = await player.play(channel, query, {

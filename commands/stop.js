@@ -1,5 +1,5 @@
 const { SlashCommand } = require('slash-create');
-const { Player } = require("discord-player");
+const { Player } = require('discord-player');
 
 module.exports = class extends SlashCommand {
     constructor(creator) {
