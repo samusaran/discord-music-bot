@@ -41,9 +41,6 @@ creator
     .syncCommands();
 
 client.login(process.env.DISCORD_CLIENT_TOKEN);
-client.application.commands.set([]);
-
-
 
 module.exports = {
     client,
