@@ -40,8 +40,8 @@ creator
     .registerCommandsIn(path.join(__dirname, 'commands'))
     .syncCommands();
 
-client.login(process.env.DISCORD_CLIENT_TOKEN)
-    .then(() => client.application.commands.set([]));
+client.login(process.env.DISCORD_CLIENT_TOKEN);
+client.application.commands.set([]);
 
 
 module.exports = {
