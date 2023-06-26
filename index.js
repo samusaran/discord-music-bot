@@ -6,6 +6,7 @@ const { Client, GatewayIntentBits } = require('discord.js');
 const { Player } = require('discord-player');
 const { registerPlayerEvents } = require('./events');
 const { generateDocs } = require('./docs');
+const { YouTubeExtractor } = require('@discord-player/extractor');
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ const client = new Client({
 
 const player = Player.singleton(client);
 registerPlayerEvents(player);
+player.extractors.register(YoutubeExtractor, {});
 
 const creator = new SlashCreator({
     applicationID: process.env.DISCORD_CLIENT_ID,
