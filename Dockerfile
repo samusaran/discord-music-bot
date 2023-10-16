@@ -1,9 +1,8 @@
-FROM node:alpine
+FROM node:lts
 WORKDIR discord-music-bot
-RUN apk add ffmpeg
 
 COPY . .
+RUN node -v
 RUN npm install
 
-CMD yarn start
-
+CMD npm start
