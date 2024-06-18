@@ -17,9 +17,9 @@ const client = new Client({
     ]
 });
 
-const player = Player.singleton(client);
+const player = new Player(client);
 registerPlayerEvents(player);
-player.extractors.register(YouTubeExtractor, {});
+player.extractors.loadDefault((ext) => true);
 
 const creator = new SlashCreator({
     applicationID: process.env.DISCORD_CLIENT_ID,

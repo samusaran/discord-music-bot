@@ -1,5 +1,5 @@
 const { SlashCommand, CommandOptionType } = require('slash-create');
-const { Player} = require('discord-player');
+const { useMainPlayer } = require('discord-player');
 
 module.exports = class extends SlashCommand {
     constructor(creator) {
@@ -21,16 +21,11 @@ module.exports = class extends SlashCommand {
 
     async run (ctx) {
 
-        const { client } = require('..');
-        const player = Player.singleton(client);
+        const player = useMainPlayer();
+        const channel = ctx.member.voice.channel;
+        const query = ctx.options.getString('query', true);
 
         await ctx.defer();
-
-        const guild = client.guilds.cache.get(ctx.guildID);
-        const member = guild.members.cache.get(ctx.member.user.id);
-        const channel = member.voice.channel;
-        const query = ctx.options.query;
-
 
         try {
             const { track } = await player.play(channel, query, {
