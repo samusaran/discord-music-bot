@@ -1,43 +1,40 @@
-const { SlashCommand, CommandOptionType } = require('slash-create');
+const { ApplicationCommandOptionType } = require('discord.js');
 const { useMainPlayer } = require('discord-player');
 
-module.exports = class extends SlashCommand {
-    constructor(creator) {
-        super(creator, {
-            name: 'play',
-            description: 'Play a song from youtube',
-            options: [
-                {
-                    name: 'query',
-                    type: CommandOptionType.STRING,
-                    description: 'The song you want to play',
-                    required: true
-                }
-            ],
-
-            guildIDs: process.env.DISCORD_GUILD_ID ? [ process.env.DISCORD_GUILD_ID ] : undefined
-        });
-    }
-
-    async run (ctx) {
-
-        const player = useMainPlayer();
-        const channel = ctx.member.voice.channel;
-        const query = ctx.options.getString('query', true);
-
-        await ctx.defer();
-
-        try {
-            const { track } = await player.play(channel, query, {
-                nodeOptions: {
-                    metadata: ctx
-                }
-            });
-
-            return ctx.sendFollowUp(`**${track.title}** enqueued!`);
-        } catch (e) {
-            // let's return error if something failed
-            return ctx.sendFollowUp(`Something went wrong: ${e}`);
+const data = {
+    name: 'play',
+    description: 'Play a song from youtube',
+    options: [
+        {
+            name: 'query',
+            type: ApplicationCommandOptionType.String,
+            description: 'The song you want to play',
+            required: true
         }
-    }
+    ],
 };
+
+async function run({interaction}) {
+
+    const player = useMainPlayer();
+    const channel = interaction.member.voice.channel;
+    const query = interaction.options.getString('query', true);
+
+    await interaction.deferReply();
+
+    try {
+        const {track} = await player.play(channel, query, {
+            nodeOptions: {
+                metadata: interaction
+            }
+        });
+
+        return interaction.editReply(`**${track.title}** enqueued!`);
+    } catch (e) {
+        // let's return error if something failed
+        return interaction.editReply(`Something went wrong: ${e}`);
+    }
+}
+
+
+module.exports = { data, run };

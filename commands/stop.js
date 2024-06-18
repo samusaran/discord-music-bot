@@ -1,24 +1,22 @@
-const { SlashCommand } = require('slash-create');
-const { Player } = require('discord-player');
+const { useQueue } = require('discord-player');
 
-module.exports = class extends SlashCommand {
-    constructor(creator) {
-        super(creator, {
-            name: 'stop',
-            description: 'Stop the player',
+module.exports = {
+    data: {
+        name: 'stop',
+        description: 'Stop the player',
 
-            guildIDs: process.env.DISCORD_GUILD_ID ? [ process.env.DISCORD_GUILD_ID ] : undefined
-        });
-    }
+        guildIDs: process.env.DISCORD_GUILD_ID ? [ process.env.DISCORD_GUILD_ID ] : undefined
+    },
 
-    async run(ctx) {
-        const { client } = require('..');
-        const player = Player.singleton(client);
 
-        await ctx.defer();
-        const queue = player.nodes.get(ctx.guildID);
-        if (!queue || !queue.isPlaying()) return void ctx.sendFollowUp({ content: '❌ | No music is being played!' });
-        queue.delete();
-        await ctx.sendFollowUp({ content: '🛑 | Stopped the player!' });
+    run: async function ({interaction}) {
+
+        await interaction.deferReply();
+
+        const queue = useQueue(interaction.guildId);
+        if (!queue || !queue.isPlaying()) return void interaction.editReply({ content: '❌ | No music is being played!' });
+
+        queue.node.stop();
+        await interaction.editReply({ content: '🛑 | Stopped the player!' });
     }
 };

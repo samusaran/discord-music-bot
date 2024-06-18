@@ -1,12 +1,9 @@
 const dotenv = require('dotenv');
 const path = require('path');
-const { SlashCreator, GatewayServer } = require('slash-create');
-
+const { CommandKit } = require('commandkit');
 const { Client, GatewayIntentBits } = require('discord.js');
 const { Player } = require('discord-player');
 const { registerPlayerEvents } = require('./events');
-const { generateDocs } = require('./docs');
-const { YouTubeExtractor } = require('@discord-player/extractor');
 
 dotenv.config();
 
@@ -19,32 +16,21 @@ const client = new Client({
 
 const player = new Player(client);
 registerPlayerEvents(player);
-player.extractors.loadDefault((ext) => true);
+player.extractors.loadDefault((ext) => ext == "YouTubeExtractor");
 
-const creator = new SlashCreator({
-    applicationID: process.env.DISCORD_CLIENT_ID,
-    token: process.env.DISCORD_CLIENT_TOKEN,
+const commandKit = new CommandKit({
+    client,
+    commandsPath: path.join(__dirname, 'commands'),
+    bulkRegister: true
 });
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
-
-    console.log('Generating docs...');
-    generateDocs(creator.commands);
 });
-
-creator
-    .withServer(
-        new GatewayServer(
-            (handler) => client.ws.on('INTERACTION_CREATE', handler)
-        )
-    )
-    .registerCommandsIn(path.join(__dirname, 'commands'))
-    .syncCommands();
 
 client.login(process.env.DISCORD_CLIENT_TOKEN);
 
 module.exports = {
     client,
-    creator
+    commandKit
 };

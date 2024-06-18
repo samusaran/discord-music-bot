@@ -9,7 +9,7 @@ module.exports.registerPlayerEvents = (player) => {
     });
 
     player.events.on('playerStart', (queue, track) => {
-        queue.metadata.send(`🎶 | Started playing: **${track.title}**`);
+        queue.metadata.channel.send(`🎶 | Started playing: **${track.title}**`);
     });
 
     player.events.on('audioTrackAdd', (queue, track) => {
@@ -17,19 +17,19 @@ module.exports.registerPlayerEvents = (player) => {
     });
 
     player.events.on('audioTracksAdd', (queue, track) => {
-        queue.metadata.send(`🎶 | Track **${track.title}** queued!`);
+        queue.metadata.channel.send(`🎶 | Track **${track.title}** queued!`);
     });
 
     player.events.on('botDisconnect', (queue) => {
-        queue.metadata.send('❌ | I was manually disconnected from the voice channel, clearing queue!');
+        queue.metadata.channel.send('❌ | I was manually disconnected from the voice channel, clearing queue!');
     });
 
     player.events.on('channelEmpty', (queue) => {
-        queue.metadata.send('❌ | Nobody is in the voice channel, leaving...');
+        queue.metadata.channel.send('❌ | Nobody is in the voice channel, leaving...');
     });
 
     player.events.on('emptyQueue', (queue) => {
-        queue.metadata.send('✅ | Queue finished!');
+        queue.metadata.channel.send('✅ | Queue finished!');
         console.log('Queue finished!');
     });
 
