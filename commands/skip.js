@@ -1,4 +1,4 @@
-const { useMainPlayer } = require('discord-player');
+const { useQueue} = require('discord-player');
 
 module.exports = {
     data: {
@@ -11,17 +11,15 @@ module.exports = {
 
     run: async function ({interaction}) {
 
-        // const { client } = require('..');
-        // const player = Player.singleton(client);
-        //
-        // await interaction.deferReply();
-        // const queue = player.nodes.get(ctx.guildID);
-        // if (!queue || !queue.isPlaying()) return void ctx.sendFollowUp({ content: '❌ | No music is being played!' });
-        // const currentTrack = queue.currentTrack;
-        // const success = queue.node.skip();
-        // return void ctx.sendFollowUp({
-        //     content: success ? `✅ | Skipped **${currentTrack}**!` : '❌ | Something went wrong!'
-        // });
+        await interaction.deferReply();
 
+        const queue = useQueue(interaction.guildId);
+        if (!queue || !queue.isPlaying()) return void interaction.editReply({ content: '❌ | No music is being played!' });
+
+        const currentTrack= queue.currentTrack;
+        const success= queue.node.skip();
+        await interaction.editReply({
+            content: success ? `✅ | Skipped **${currentTrack}**!` : '❌ | Something went wrong!'
+        });
     }
 };
