@@ -20,8 +20,7 @@ player.extractors.loadDefault((ext) => ext == "YouTubeExtractor");
 
 const commandKit = new CommandKit({
     client,
-    commandsPath: path.join(__dirname, 'commands'),
-    bulkRegister: true
+    commandsPath: path.join(__dirname, 'commands')
 });
 
 client.on('ready', () => {
